@@ -1,0 +1,75 @@
+# Crystal Clock - use 32MHz onboard oscillator
+NET "clk_in" PERIOD = 31.25 ns HIGH 50 %;
+NET "clk_in" IOSTANDARD = LVCMOS25;
+NET "clk_in" LOC = P89;
+
+# Wing1 Column A
+#NET "W1A<0>"	LOC = "P18" ;	
+#NET "W1A<1>"	LOC = "P23" ;  	
+#NET "W1A<2>"	LOC = "P26" ;  	
+#NET "W1A<3>"	LOC = "P33" ;  	
+#NET "W1A<4>"	LOC = "P35" ;  	
+#NET "W1A<5>"	LOC = "P40" ;  	
+#NET "W1A<6>"	LOC = "P53" ;  	
+#NET "W1A<7>"	LOC = "P57" ;  	
+#NET "W1A<8>"	LOC = "P60" ;  	
+#NET "W1A<9>"	LOC = "P62" ;   
+#NET "W1A<10>"	LOC = "P65" ;	
+#NET "W1A<11>"	LOC = "P67" ;	
+#NET "W1A<12>"	LOC = "P70" ;	
+#NET "W1A<13>"	LOC = "P79" ;	
+#NET "W1A<14>"	LOC = "P84" ;	
+#NET "W1A<15>"	LOC = "P86" ;	
+
+# Wing1 Column B
+#NET "W1B<0>"	LOC = "P85" ;	
+#NET "W1B<1>"	LOC = "P83" ;	
+#NET "W1B<2>"	LOC = "P78" ;	
+#NET "W1B<3>"	LOC = "P71" ;	
+#NET "W1B<4>"	LOC = "P68" ;	
+#NET "W1B<5>"	LOC = "P66" ;	
+#NET "W1B<6>"	LOC = "P63" ;	
+#NET "W1B<7>"	LOC = "P61" ;	
+#NET "W1B<8>"	LOC = "P58" ;	
+#NET "W1B<9>"	LOC = "P54" ;	
+#NET "W1B<10>"	LOC = "P41" ;	
+#NET "W1B<11>"	LOC = "P36" ;	
+#NET "W1B<12>"	LOC = "P34" ;	
+#NET "W1B<13>"	LOC = "P32" ;	
+#NET "W1B<14>"	LOC = "P25" ;	
+#NET "W1B<15>"	LOC = "P22" ;	
+
+# Wing2 Column C
+NET "wing<0>"		LOC = P91 ;
+NET "wing<1>"		LOC = P92 ;
+NET "wing<2>"		LOC = P94 ;
+NET "wing<3>"		LOC = P95 ;
+NET "wing<4>"		LOC = P98 ;
+NET "wing<5>"		LOC = P2 ;  	
+NET "wing<6>"		LOC = P3 ;  	
+NET "wing<7>"		LOC = P4 ;  	
+NET "wing<8>"		LOC = P5 ;  	
+NET "wing<9>"		LOC = P9 ;   
+NET "wing<10>"		LOC = P10 ;	
+NET "wing<11>"		LOC = P11 ;	
+NET "wing<12>"		LOC = P12 ;	
+NET "wing<13>"		LOC = P15 ;	
+NET "wing<14>"		LOC = P16 ;	
+NET "wing<15>"		LOC = P17 ;	
+
+## RS232
+NET "rx" IOSTANDARD = LVCMOS25;
+NET "rx" LOC = P88;
+NET "tx" IOSTANDARD = LVCMOS25;
+NET "tx" DRIVE = 4;
+NET "tx" SLEW = SLOW;
+NET "tx" LOC = P90;
+
+
+
+# PlanAhead Generated physical constraints 
+
+INST "ram_inst/RAMB_inst0" LOC = RAMB16_X0Y0;
+INST "ram_inst/RAMB_inst1" LOC = RAMB16_X0Y1;
+#INST "ram_inst/RAMB_inst2" LOC = RAMB16_X0Y2;
+#INST "ram_inst/RAMB_inst3" LOC = RAMB16_X0Y3;
