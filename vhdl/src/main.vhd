@@ -7,35 +7,27 @@ entity main is
 		clk_in:	in		std_logic;
 		rx:		in		std_logic;
 		tx:		out	std_logic;
-		wing:		inout	std_logic_vector(15 downto 0));
+		wing:		out	std_logic_vector(15 downto 0));
 end main;
 
 architecture Behavioral of main is
 
 	component clock is
    port (
-		clk_in:		in    std_logic;
-		clk:			out   std_logic;
-		clk180:		out   std_logic);
+		clk_in:				in  std_logic;
+		clk:					out std_logic;
+		clk180:				out std_logic);
 	end component;
 
-	component cpu is
+	component j1 is
 	port (
-		clk:			in  std_logic;
-		read:			out std_logic;
-		write:		out std_logic;
-		a:				out std_logic_vector (14 downto 0);
-		d_in:			out std_logic_vector (15 downto 0);
-		d_out:		in  std_logic_vector (15 downto 0));
-	end component;
-
-	component ram is
-	port (
-		clk:			in  std_logic;
-		we:			in  std_logic;
-		a:				in  std_logic_vector (11 downto 0);
-		d_in:			in  std_logic_vector (15 downto 0);
-		d_out:		out std_logic_vector (15 downto 0));
+		sys_clk_i:			in  std_logic;
+		sys_rst_i:			in  std_logic;
+		io_rd:				out std_logic;
+		io_wr:				out std_logic;
+		io_addr:				out std_logic_vector (15 downto 0);
+		io_din:				in  std_logic_vector (15 downto 0);
+		io_dout:				out std_logic_vector (15 downto 0));
 	end component;
 	
 	component uart is
@@ -43,100 +35,82 @@ architecture Behavioral of main is
 		clk:		in  STD_LOGIC;
 		rx:		in  STD_LOGIC;
 		tx:		out STD_LOGIC;
-		read:		in  STD_LOGIC;
-		write:	in  STD_LOGIC;
-		a: 		in  STD_LOGIC;
-		d_in: 	in  STD_LOGIC_VECTOR (15 downto 0);
-		d_out:	out STD_LOGIC_VECTOR (15 downto 0));
+		io_rd:	in  STD_LOGIC;
+		io_wr:	in  STD_LOGIC;
+		io_addr:	in  STD_LOGIC;
+		io_din: 	in  STD_LOGIC_VECTOR (15 downto 0);
+		io_dout:	out STD_LOGIC_VECTOR (15 downto 0));
 	end component;
 
-	component io is
-	port (
-		clk:			in		std_logic;
-		io:			inout	std_logic_vector (15 downto 0);
-		write:		in		std_logic;
-		a:				in		std_logic;
-		d_in:			in		std_logic_vector (15 downto 0);
-		d_out:		out	std_logic_vector (15 downto 0));
-	end component;
 	
 	signal clk:				std_logic;
 	signal clk180:			std_logic;
 	
-	signal read:			std_logic;
-	signal write:			std_logic;
-	signal a:				std_logic_vector (14 downto 0);
-	signal d_in:			std_logic_vector (15 downto 0);
-	signal d_out:			std_logic_vector (15 downto 0);
+	signal rst_counter:	integer range 0 to 15 := 15;
+	signal sys_rst:		std_logic := '1';
 	
-	signal ram_write:		std_logic;
-	signal ram_d_out:		std_logic_vector (15 downto 0);
-	
-	signal uart_read:		std_logic;
-	signal uart_write:	std_logic;
-	signal uart_d_out:	std_logic_vector (15 downto 0);
-	
-	signal io_write:		std_logic;
-	signal io_d_out:		std_logic_vector (15 downto 0);
+	signal io_rd:			std_logic;
+	signal io_wr:			std_logic;
+	signal io_addr:		std_logic_vector (15 downto 0);
+	signal io_din:			std_logic_vector (15 downto 0);
+	signal io_dout:		std_logic_vector (15 downto 0);
 
+	signal uart_en:		std_logic;
+	signal uart_rd:		std_logic;
+	signal uart_wr:		std_logic;
+	signal uart_dout:		std_logic_vector (15 downto 0);
 begin
 
 	clock_inst: clock
 	port map (
-		clk_in	=> clk_in,
-		clk		=> clk,
-		clk180	=> clk180);
+		clk_in		=> clk_in,
+		clk			=> clk,
+		clk180		=> clk180);
 
-	cpu_inst: cpu
+	j1_inst: j1
 	port map (
-		clk		=> clk180,
-		read		=> read,
-		write		=> write,
-		a			=> a,
-		d_in		=> d_in,
-		d_out		=> d_out);
-
-	ram_inst: ram
-	port map (
-		clk		=> clk,
-		a			=> a(11 downto 0),
-		we			=> ram_write,
-		d_in		=> d_in,
-		d_out		=> ram_d_out
-	);
-
-	io_inst: io
-	port map (
-		clk		=> clk,
-		io			=> wing,
-		a			=> a(0),
-		write		=> io_write,
-		d_in		=> d_in,
-		d_out		=> io_d_out
-	);
-	
+		sys_clk_i	=> clk,
+		sys_rst_i	=> sys_rst,
+		io_rd			=> io_rd,
+		io_wr			=> io_wr,
+		io_addr		=> io_addr,
+		io_din		=> io_din,
+		io_dout		=> io_dout);
+		
 	uart_inst: uart
-	port map (
-		clk		=> clk,
+	port map(
+		clk		=> clk180,
 		rx			=> rx,
 		tx			=> tx,
-		read		=> uart_read,
-		write		=> uart_write,
-		a			=> a(0),
-		d_in		=> d_in,
-		d_out		=> uart_d_out);
-
-	uart_read	<= read  when a(14 downto 12)="111" else '0';
+		io_rd		=> uart_rd,
+		io_wr		=> uart_wr,
+		io_addr	=> io_addr(0),
+		io_din	=> io_dout,
+		io_dout	=> uart_dout);
+					
+	process (clk)
+	begin
+		if rising_edge(clk) and rst_counter>0 then
+			rst_counter <= rst_counter-1;
+		end if;
+	end process;
+	sys_rst <= '1' when rst_counter>0 else '0';
 	
-	ram_write	<= write when a(14 downto 12)="000" else '0';
-	io_write		<= write when a(14 downto 12)="100" else '0';
-	uart_write	<= write when a(14 downto 12)="111" else '0';
+	uart_en <= '1' when io_addr(15 downto 12)="0100" else '0';
+	uart_rd <= io_rd and uart_en;
+	uart_wr <= io_wr and uart_en;
 	
-	with a(14 downto 12) select
-	d_out <=	ram_d_out	when "000",
-				io_d_out		when "100",
-				uart_d_out	when "111",
-				(others=>'0') when others;
+	process (io_addr, uart_dout)
+	begin
+		case io_addr(15 downto 12) is
+		when "0100" =>
+			io_din <= uart_dout;
+		when others =>
+			io_din <= (others=>'0');
+		end case;
+	end process;
+	
+	wing <= (others=>'0');
 	
 end Behavioral;
 

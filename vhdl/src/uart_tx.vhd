@@ -6,8 +6,8 @@ entity uart_tx is
 	port (
 		clk:			in  STD_LOGIC;
 		clk_divider:in  STD_LOGIC_VECTOR (15 downto 0);
-		d_in:			in  STD_LOGIC_VECTOR (7 downto 0);
-		write:		in  STD_LOGIC;
+		din:			in  STD_LOGIC_VECTOR (7 downto 0);
+		wr:			in  STD_LOGIC;
 		ready:		out STD_LOGIC;
 		serial_out:	out STD_LOGIC);
 end uart_tx;
@@ -25,10 +25,10 @@ begin
 	process (clk)
 	begin
 		if rising_edge(clk) then
-			if write='1' then
+			if wr='1' then
 				bit_counter <= "1010";
 				clk_counter <= unsigned(clk_divider);
-				shift <= d_in;
+				shift <= din;
 				serial_out <= '0';
 				
 			elsif bit_counter>0 then

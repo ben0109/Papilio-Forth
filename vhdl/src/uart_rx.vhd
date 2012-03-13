@@ -9,9 +9,9 @@ entity uart_rx is
 		clk:			in  STD_LOGIC;
 		clk_divider:in  STD_LOGIC_VECTOR (15 downto 0);
 		serial_in:	in  STD_LOGIC;
-		read:			in  STD_LOGIC;
+		rd:			in  STD_LOGIC;
 		ready:		out STD_LOGIC;
-		d_out:		out STD_LOGIC_VECTOR (7 downto 0));
+		dout:			out STD_LOGIC_VECTOR (7 downto 0));
 end uart_rx;
 
 architecture Behavioral of uart_rx is
@@ -19,13 +19,14 @@ architecture Behavioral of uart_rx is
 	signal bit_counter:	unsigned(3 downto 0) := (others=>'0');
 	signal clk_counter:	unsigned(15 downto 0) := (others=>'0');
 	signal last_in:		std_logic;
-	signal shift:			std_logic_vector(7 downto 0);
-	signal byte_received:std_logic;
+	signal shift:			std_logic_vector(8 downto 0) := (others=>'0');
+	signal byte_received:std_logic := '0';
 	signal ready_buf:		std_logic := '0';
 
 begin
 
 	ready <= ready_buf;
+	dout	<= shift(7 downto 0);
 
 	process (clk)
 	begin
@@ -45,17 +46,16 @@ begin
 				else
 					if std_logic_vector(clk_counter)="0"&clk_divider(15 downto 1) then
 						if bit_counter=1 then
-							d_out				<= shift;
 							byte_received	<= serial_in;
 						end if;
-						shift(7 downto 0) <= serial_in&shift(7 downto 1);
+						shift(8 downto 0) <= serial_in&shift(8 downto 1);
 						bit_counter <= bit_counter-1;
 					end if;
 					clk_counter <= clk_counter-1;
 				end if;
 			end if;
 			
-			ready_buf <= (ready_buf or byte_received) and not read;
+			ready_buf <= (ready_buf or byte_received) and not rd;
 		end if;
 	end process;
 end Behavioral;

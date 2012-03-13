@@ -45,9 +45,9 @@ ARCHITECTURE behavior OF uart_rx_tb IS
          clk : IN  std_logic;
          clk_divider : IN  std_logic_vector(15 downto 0);
          serial_in : IN  std_logic;
-         read : IN  std_logic;
+         rd : IN  std_logic;
          ready : OUT  std_logic;
-         d_out : OUT  std_logic_vector(7 downto 0)
+         dout : OUT  std_logic_vector(7 downto 0)
         );
     END COMPONENT;
     
@@ -73,9 +73,9 @@ BEGIN
           clk => clk,
           clk_divider => clk_divider,
           serial_in => serial_in,
-          read => read,
+          rd => read,
           ready => ready,
-          d_out => d_out
+          dout => d_out
         );
 
    -- Clock process definitions
