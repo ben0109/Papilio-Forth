@@ -1,8 +1,14 @@
 ADDRESS_MAP bootrom PPC405 0
-	ADDRESS_SPACE boot_code RAMB16[0x00000000:0x00000FFF]
+	ADDRESS_SPACE boot_code RAMB16[0x000000000:0x00003FFF]
 		BUS_BLOCK
-			ram_inst/RAMB_inst0 [7:0] PLACED=X0Y0;
-			ram_inst/RAMB_inst1 [15:8] PLACED=X0Y1;
+         j1_inst/ram[7].ram [15:14]; 
+         j1_inst/ram[6].ram [13:12]; 
+         j1_inst/ram[5].ram [11:10]; 
+         j1_inst/ram[4].ram [9:8]; 
+         j1_inst/ram[3].ram [7:6]; 
+         j1_inst/ram[2].ram [5:4]; 
+         j1_inst/ram[1].ram [3:2]; 
+         j1_inst/ram[0].ram [1:0]; 
 		END_BUS_BLOCK;
 	END_ADDRESS_SPACE;
 END_ADDRESS_MAP;

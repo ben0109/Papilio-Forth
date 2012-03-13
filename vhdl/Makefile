@@ -8,4 +8,4 @@ load: final.bit
 	sudo papilio-prog -v -f final.bit
 
 final.bit: main.bit forth.bmm $(MEM_FILE)
-	$(DATA2MEM) -bm forth.bmm -bd $(MEM_FILE) -bt main.bit -o b final.bit
+	$(DATA2MEM) -bm forth_bd.bmm -bd $(MEM_FILE) -bt main.bit -o b final.bit
