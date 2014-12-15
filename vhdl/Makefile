@@ -9,3 +9,6 @@ load: final.bit
 
 final.bit: main.bit forth.bmm $(MEM_FILE)
 	$(DATA2MEM) -bm forth_bd.bmm -bd $(MEM_FILE) -bt main.bit -o b final.bit
+
+clean:
+	rm -f final.bit main.bit papilio_pro_forth.bit 
