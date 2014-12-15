@@ -47,7 +47,7 @@ public class Compiler
 	Map<String,NativeWord>			nativeWords;
 	Map<String,short[]>				aliasWords;
 
-	enum OutputFormat { Bin, Mem, Init };
+	enum OutputFormat { Bin, Mem, Init, Hex };
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -69,6 +69,8 @@ public class Compiler
 					format = OutputFormat.Mem;
 				} else if ("init".equals(f)) {
 					format = OutputFormat.Init;
+				} else if ("hex".equals(f)) {
+					format = OutputFormat.Hex;
 				} else {
 					Log.fatal("wrong format %s",f);
 					usage(1);
@@ -126,6 +128,7 @@ public class Compiler
 		case Bin:	compiler.writeBinFile(output); break;
 		case Mem:	compiler.writeMemFile(output); break;
 		case Init:	compiler.writeInitFile(output); break;
+		case Hex:   compiler.writeHexFile(output); break;
 		}
 		if (map!=null) {
 			compiler.writeMapFile(map);
@@ -136,7 +139,7 @@ public class Compiler
 	{
 		System.err.println("usage: java Compiler [options] file1 file2 ... filen");
 		System.err.println("Options are:");
-		System.err.println("    -format format  output format, 'bin' for binary, 'mem' for mem, 'init' for init values of bram [default: bin]");	
+		System.err.println("    -format format  output format, 'bin' for binary, 'mem' for mem, 'init' for init values of bram, 'hex' for hexadecimal [default: bin]");	
 		System.err.println("    -help           print this help and exit");
 		System.err.println("    -compact        do not include word names in produced code -- the resulting system *cannot* be interactive");
 		System.err.println("    -log level      set log level, in 'error','warning','info','debug','trace' [defaults to error]");
@@ -201,6 +204,17 @@ public class Compiler
 		}
 		os.close();
 	}
+
+	private void writeHexFile(String name)
+			throws FileNotFoundException, IOException
+	{
+		PrintWriter os = new PrintWriter(name);
+		for (int i=0; i<memory.length; i++) {
+			os.printf("%04X\n",memory[i]);
+		}
+		os.close();
+	}
+
 
 	private void writeMapFile(String name)
 			throws FileNotFoundException, IOException
