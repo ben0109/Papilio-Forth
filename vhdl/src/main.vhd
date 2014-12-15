@@ -88,7 +88,7 @@ begin
 		io_din	=> io_dout,
 		io_dout	=> uart_dout);
 					
-	process (clk)
+	process (clk, rst_counter)
 	begin
 		if rising_edge(clk) and rst_counter>0 then
 			rst_counter <= rst_counter-1;
