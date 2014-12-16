@@ -2,15 +2,15 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity main is
+entity papilio_pro_forth is
 	port (
 		clk_in:	in		std_logic;
 		rx:		in		std_logic;
 		tx:		out	std_logic;
 		wing:		out	std_logic_vector(15 downto 0));
-end main;
+end papilio_pro_forth;
 
-architecture Behavioral of main is
+architecture Behavioral of papilio_pro_forth is
 
 	component clock is
    port (
